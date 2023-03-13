@@ -1,0 +1,43 @@
+﻿@typeparam TItem
+<div class="dropdown position-static" @attributes="AdditionalAttributes">
+    <button Text="@Text" IconClass="@IconClass" class="@Class" data-bs-toggle="dropdown"  data-bs-target="parent"  data-bs-boundary="@Boundary"/>
+    <div class="dropdown-menu">
+        @if (DropdownMenuContent != null)
+        {
+            @DropdownMenuContent
+        } 
+        @if (Items != null)
+        {
+            @foreach (var item in Items)    
+            {
+                <div class="dropdown-item" @onclick="_ => OnItemClick.InvokeAsync(item)">@ChildContent?.Invoke(item)</div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string? @class { get; set; }
+    [Parameter] public string? IconClass { get; set; }
+    [Parameter] public IEnumerable<TItem>? Items { get; set; }
+    [Parameter] public EventCallback<TItem> OnItemClick { get; set; }
+
+    [Parameter] public RenderFragment<TItem>? ChildContent { get; set; }
+    [Parameter] public RenderFragment? DropdownMenuContent { get; set; }
+
+
+    [Parameter] public string? Text { get; set; }
+
+    /// <summary>
+    /// Overflow constraint boundary of the dropdown menu. Accepts the values of 'viewport', 'window', 'scrollParent', or an HTMLElement
+    /// </summary>
+    /// <remarks>
+    /// Adds data-bs-boundary parameter to the dropdown button.
+    /// </remarks>
+    [Parameter] public string? Boundary { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    protected string Class => $"{this.@class} dropdown-toggle";
+}

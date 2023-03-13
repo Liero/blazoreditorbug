@@ -1,0 +1,47 @@
+﻿@if (InternalOrder == null || InternalOrder.Order == null)
+{
+    return;
+}
+<div class="card card-fluentui-primary shadow">
+    <div class="card-body">
+        <h5 class="card-title">@DisplayIO(InternalOrder, addPrefix: true)</h5>
+
+        <div class="hstack gap-3 flex-wrap mb-3">
+
+            @if (InternalOrder.Podset != null)
+            {
+
+                <div class="w-s">
+                    <label class="form-label">Podset k IO</label>
+                    @OrderDetail.DialogLink(Dialogs, null, InternalOrder.Podset, InternalOrder.Podset, css: "btn btn-warning")
+                </div>
+            }
+            else if (InternalOrder.HasFinishedGoodMaterial())
+            {
+                <div>
+                    <label class="form-label">Podsety</label>
+                    @if (InternalOrder.Id <= 0)
+                    {
+                        <div class="badge fs-5 d-flex bg-info text-white">Po uložení!&nbsp;</div>
+                    }
+                    else if (IOModel.Subsets?.Count == 1)
+                    {
+                        @OrderDetail.DialogLink(Dialogs, IOModel.Subsets[0].OrderId, IOModel.Subsets[0].IO, content: IOModel.Subsets[0].IO, css: "btn btn-info d-block")
+                    }
+                    else
+                    {
+                        <ButtonDropDownList TItem="SubsetVM" Items="IOModel.Subsets" Text="@($"{IOModel.Subsets?.Count}x")" class="btn btn-info w-s"
+                                    OnItemClick="io => OrderDetail.OpenDialog(Dialogs, io.OrderId, io.IO)">
+                            @context.IO
+                        </ButtonDropDownList>
+                    }
+            </div>
+}
+        </div>
+
+        @if (InternalOrder.Podset != null)
+{
+        <FormGroup @bind-Value="InternalOrder.Podset" />
+}
+    </div>
+</div>

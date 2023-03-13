@@ -1,0 +1,8 @@
+﻿@typeparam TValue
+@*for chekboxes user form-group-check css class*@
+<div @attributes="Attributes">
+    <label class="@LabelCss" for="@Id">
+        @Label
+    </label>
+    @ChildContent(this)
+</div>
